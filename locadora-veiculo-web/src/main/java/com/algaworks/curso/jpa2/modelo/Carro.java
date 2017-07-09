@@ -1,22 +1,12 @@
 package com.algaworks.curso.jpa2.modelo;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-
 @NamedQueries({
-    @NamedQuery(name="Carro.buscarTodos", query="select c from Carro c"),
+//    @NamedQuery(name="Carro.buscarTodos", query="select c from Carro c"),
+    @NamedQuery(name="Carro.buscarTodos", query="select c from Carro c JOIN c.modelo m"),
     @NamedQuery(name="Carro.buscarComCarrosComAcessorios", query="select c from Carro c JOIN c.acessorios a WHERE c.codigo = :codigo")
 })
 @Entity
@@ -68,7 +58,7 @@ public class Carro {
 		this.valorDiaria = valorDiaria;
 	}
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="codigo_modelo")
 	public ModeloCarro getModelo() {
 		return modelo;
@@ -76,7 +66,7 @@ public class Carro {
 	public void setModelo(ModeloCarro modelo) {
 		this.modelo = modelo;
 	}
-	
+
 	@ManyToMany
 	@JoinTable(name="carro_acessorio"
 				, joinColumns=@JoinColumn(name="codigo_carro")
@@ -87,15 +77,15 @@ public class Carro {
 	public void setAcessorios(List<Acessorio> acessorios) {
 		this.acessorios = acessorios;
 	}
-	
-	@OneToMany(mappedBy="carro")
+
+	@OneToMany(mappedBy="carro", cascade = CascadeType.PERSIST, orphanRemoval = true)
 	public List<Aluguel> getAlugueis() {
 		return alugueis;
 	}
 	public void setAlugueis(List<Aluguel> alugueis) {
 		this.alugueis = alugueis;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,7 +93,7 @@ public class Carro {
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
