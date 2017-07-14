@@ -10,7 +10,6 @@ public class VeiculoId implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String placa;
-    
     private String cidade;
 
     public VeiculoId(String placa, String cidade) {

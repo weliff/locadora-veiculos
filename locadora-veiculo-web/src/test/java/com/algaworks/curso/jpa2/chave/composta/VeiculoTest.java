@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Persistence;
 
 import org.junit.After;
@@ -33,9 +35,18 @@ public class VeiculoTest {
     @Test
     public void deveSalvarVeiculoComChaveComposta() throws Exception {
         Veiculo veiculo = new Veiculo();
-        veiculo.setId(new VeiculoId("ABC-1234", "Tomé"));
+        veiculo.setApolice(new Apolice());
+        veiculo.setMarca(new Marca());
+        veiculo.setId(new VeiculoId("ABC-16732362334", "Tomé"));
         veiculo.setFabricante("Chevrolet");
         veiculo.setModelo("Camaro");
+        Proprietario proprietario = new Proprietario();
+        proprietario.setNome("weliff");
+        
+        proprietario.getTelefones().add("Telefone 1");
+        proprietario.getTelefones().add("Telefone 2");
+        
+        veiculo.setProprietario(proprietario);
         
         em.getTransaction().begin();
         

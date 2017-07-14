@@ -1,9 +1,18 @@
 package com.algaworks.curso.jpa2.chave.composta;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,7 +27,19 @@ public class Veiculo implements Serializable {
     private String fabricante;
     
     private String modelo;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "apolice_id")
+    private Apolice apolice;
+    
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "marca_id")
+    private Marca marca;
+    
+    @Embedded
+    private Proprietario proprietario;
+    
     public VeiculoId getId() {
         return id;
     }
@@ -67,5 +88,30 @@ public class Veiculo implements Serializable {
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
+
+    public Apolice getApolice() {
+        return apolice;
+    }
+
+    public void setApolice(Apolice apolice) {
+        this.apolice = apolice;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
+        this.marca = marca;
+    }
+
+    public Proprietario getProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(Proprietario proprietario) {
+        this.proprietario = proprietario;
+    }
+
     
 }
